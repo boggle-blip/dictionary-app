@@ -10,6 +10,8 @@
     :root {
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
+      --secondary: #64748b;
+      --secondary-hover: #475569;
       --bg: #f1f5f9;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -62,10 +64,8 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    .search-btn {
-      padding: 0 22px;
-      background: var(--primary);
-      color: white;
+    .btn {
+      padding: 0 18px;
       border: none;
       border-radius: 10px;
       font-size: 16px;
@@ -77,8 +77,23 @@
       justify-content: center;
     }
 
+    .search-btn {
+      background: var(--primary);
+      color: white;
+    }
+
     .search-btn:hover {
       background: var(--primary-hover);
+    }
+
+    .refresh-btn {
+      background: #e2e8f0;
+      color: var(--secondary);
+    }
+
+    .refresh-btn:hover {
+      background: #cbd5e1;
+      color: var(--secondary-hover);
     }
 
     /* Search Results List */
@@ -160,48 +175,4 @@
     }
 
     .homonym-badge {
-      background: #e0e7ff;
-      color: #3730a3;
-      font-size: 0.85rem;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    .card-body {
-      line-height: 1.6;
-      font-size: 1rem;
-      color: #334155;
-      white-space: pre-wrap;
-    }
-
-    .no-results {
-      text-align: center;
-      color: var(--muted);
-      padding: 20px;
-    }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <h1>Dictionary</h1>
-  
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Type a word..." />
-    <button class="search-btn" id="searchBtn">Search</button>
-  </div>
-
-  <div id="resultsList" class="results-list"></div>
-  <div id="cardsContainer" class="cards-container"></div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script src="app.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
-</body>
-</html>
+      background: #e0e7
