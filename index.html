@@ -202,3 +202,81 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .homonym-badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      line-height: 1.6;
+      font-size: 1rem;
+      color: #334155;
+      white-space: pre-wrap;
+    }
+
+    /* Custom 404 Error Box */
+    .error-container {
+      text-align: center;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-top: 10px;
+    }
+
+    .error-image {
+      max-width: 260px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .error-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Dictionary</h1>
+  
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Type a word..." autocomplete="off" />
+      <button class="btn search-btn" id="searchBtn">Search</button>
+      <button class="btn refresh-btn" id="refreshBtn" title="Reset Search">🔄</button>
+    </div>
+    <div id="dropdown" class="dropdown"></div>
+  </div>
+
+  <div id="resultsList" class="results-list"></div>
+  <div id="cardsContainer" class="cards-container"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</body>
+</html>
