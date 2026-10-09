@@ -5,7 +5,7 @@ const FILES_TO_CACHE = [
   './app.js',
   './dictionary.csv',
   './manifest.json',
-  './404.png',
+  './404.jpg',
   'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js'
 ];
 
