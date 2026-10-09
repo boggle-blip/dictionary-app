@@ -134,7 +134,7 @@ function displayWordCards(group) {
 function show404Error() {
   cardsContainer.innerHTML = `
     <div class="error-container">
-      <img src="404.png" alt="404 Word Not Found" class="error-image" />
+      <img src="404.jpg" alt="404 Word Not Found" class="error-image" />
       <p class="error-text">Zijn we weer woorden aan't verzinnen, ja?</p>
     </div>
   `;
