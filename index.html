@@ -5,48 +5,203 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dictionary App</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#3b82f6" />
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }
-    .container { max-width: 600px; margin: 0 auto; }
-    h1 { text-align: center; color: #1e293b; margin-bottom: 20px; }
-    input { width: 100%; padding: 14px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; outline: none; }
-    input:focus { border-color: #2563eb; }
-    .results { margin-top: 10px; background: white; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; }
-    .result-item { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; justify-content: space-between; }
-    .result-item:hover { background: #f1f5f9; }
-    .homonym { color: #64748b; font-size: 0.9em; }
-    .card { background: white; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: none; }
-    .card h2 { margin-top: 0; color: #2563eb; }
-    .card p { line-height: 1.6; white-space: pre-wrap; }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 24px 16px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 24px;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    /* Search Bar Layout */
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: white;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .search-btn {
+      padding: 0 22px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Search Results List */
+    .results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .result-item {
+      background: var(--card-bg);
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .result-item:hover {
+      transform: translateY(-1px);
+      border-color: var(--primary);
+    }
+
+    .result-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .result-preview {
+      color: var(--muted);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Homonym Cards Section */
+    .cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 5px solid var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .homonym-badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      line-height: 1.6;
+      font-size: 1rem;
+      color: #334155;
+      white-space: pre-wrap;
+    }
+
+    .no-results {
+      text-align: center;
+      color: var(--muted);
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <h1>Dictionary</h1>
-  <input type="text" id="searchInput" placeholder="Type a word..." />
-  <div id="results" class="results"></div>
-
-  <div id="definitionCard" class="card">
-    <h2 id="cardTitle"></h2>
-    <p id="cardDescription"></p>
+  
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Type a word..." />
+    <button class="search-btn" id="searchBtn">Search</button>
   </div>
+
+  <div id="resultsList" class="results-list"></div>
+  <div id="cardsContainer" class="cards-container"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="app.js"></script>
 <script>
-  const ACCESS_PASSWORD = "KeepOut"; // Set your password here
-
-  const userPass = prompt("Enter password to access dictionary:");
-  if (userPass !== ACCESS_PASSWORD) {
-    document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Access Denied</h2>";
-    throw new Error("Unauthorized access");
-  }
-
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
   }
-</script></body>
+</script>
+</body>
 </html>
