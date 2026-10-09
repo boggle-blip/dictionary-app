@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dictionary App</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }
+    .container { max-width: 600px; margin: 0 auto; }
+    h1 { text-align: center; color: #1e293b; margin-bottom: 20px; }
+    input { width: 100%; padding: 14px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; outline: none; }
+    input:focus { border-color: #2563eb; }
+    .results { margin-top: 10px; background: white; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; }
+    .result-item { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; justify-content: space-between; }
+    .result-item:hover { background: #f1f5f9; }
+    .homonym { color: #64748b; font-size: 0.9em; }
+    .card { background: white; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: none; }
+    .card h2 { margin-top: 0; color: #2563eb; }
+    .card p { line-height: 1.6; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Dictionary</h1>
+  <input type="text" id="searchInput" placeholder="Type a word..." />
+  <div id="results" class="results"></div>
+
+  <div id="definitionCard" class="card">
+    <h2 id="cardTitle"></h2>
+    <p id="cardDescription"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="app.js"></script>
+<script>
+  const ACCESS_PASSWORD = "KeepOut"; // Set your password here
+
+  const userPass = prompt("Enter password to access dictionary:");
+  if (userPass !== ACCESS_PASSWORD) {
+    document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Access Denied</h2>";
+    throw new Error("Unauthorized access");
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script></body>
+</html>
