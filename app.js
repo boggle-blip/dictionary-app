@@ -4,13 +4,11 @@ let dictionaryData = [];
 Papa.parse('dictionary.csv', {
   download: true,
   header: true,
-  delimiter: ';',
   skipEmptyLines: true,
   complete: function(results) {
     dictionaryData = results.data.filter(item => item.word);
   }
 });
-
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const refreshBtn = document.getElementById('refreshBtn');
