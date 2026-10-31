@@ -23,6 +23,7 @@ const wotdContainer = document.getElementById('wotdContainer');
 searchInput.addEventListener('input', function() {
   const query = this.value.trim().toLowerCase();
   dropdown.innerHTML = '';
+  updateWotdVisibility();
 
   if (!query) {
     dropdown.style.display = 'none';
@@ -75,6 +76,7 @@ function executeSearch() {
   cardsContainer.innerHTML = '';
 
   const query = searchInput.value.trim().toLowerCase();
+  updateWotdVisibility();
   if (!query) return;
 
   const matches = getGroupedMatches(query);
@@ -130,6 +132,7 @@ function displayWordCards(group) {
 
     cardsContainer.appendChild(card);
   });
+  updateWotdVisibility();
 }
 
 function show404Error() {
@@ -139,6 +142,7 @@ function show404Error() {
       <p class="error-text">Zijn we weer woorden aan't verzinnen, ja?</p>
     </div>
   `;
+  updateWotdVisibility();
 }
 
 function resetAll() {
@@ -147,6 +151,7 @@ function resetAll() {
   dropdown.innerHTML = '';
   resultsList.innerHTML = '';
   cardsContainer.innerHTML = '';
+  updateWotdVisibility();
   searchInput.focus();
 }
 
@@ -191,6 +196,17 @@ function hashString(str) {
   return h >>> 0;
 }
 
+let wotdReady = false;
+
+// The word of the day is only visible on the home page:
+// empty search box, no suggestions, no results list and no cards.
+function updateWotdVisibility() {
+  const isHome = !searchInput.value.trim()
+    && resultsList.children.length === 0
+    && cardsContainer.children.length === 0;
+  wotdContainer.hidden = !(wotdReady && isHome);
+}
+
 function showWordOfTheDay() {
   const groups = getGroupedMatches('');
   const keys = Object.keys(groups).sort();
@@ -215,7 +231,8 @@ function showWordOfTheDay() {
     displayWordCards(group);
   };
 
-  wotdContainer.hidden = false;
+  wotdReady = true;
+  updateWotdVisibility();
 }
 
 // Pick the next word right after local midnight, even if the page stays open
