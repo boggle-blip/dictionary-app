@@ -7,6 +7,8 @@ Papa.parse('dictionary.csv', {
   skipEmptyLines: true,
   complete: function(results) {
     dictionaryData = results.data.filter(item => item.word);
+    showWordOfTheDay();
+    scheduleMidnightRefresh();
   }
 });
 const searchInput = document.getElementById('searchInput');
@@ -15,6 +17,7 @@ const refreshBtn = document.getElementById('refreshBtn');
 const dropdown = document.getElementById('dropdown');
 const resultsList = document.getElementById('resultsList');
 const cardsContainer = document.getElementById('cardsContainer');
+const wotdContainer = document.getElementById('wotdContainer');
 
 // Live Typing: Temporary dropdown preview
 searchInput.addEventListener('input', function() {
@@ -165,6 +168,64 @@ function getGroupedMatches(query) {
   });
 
   return grouped;
+}
+
+// ---------- Word of the day ----------
+// Same word all day for everyone, new word at local midnight.
+// The date (YYYY-MM-DD) is hashed to pick an index, so no storage is needed.
+function getDateKey(date = new Date()) {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${m}-${d}`;
+}
+
+function hashString(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  h ^= h >>> 13;
+  h = Math.imul(h, 0x5bd1e995);
+  h ^= h >>> 15;
+  return h >>> 0;
+}
+
+function showWordOfTheDay() {
+  const groups = getGroupedMatches('');
+  const keys = Object.keys(groups).sort();
+  if (keys.length === 0) return;
+
+  const group = groups[keys[hashString(getDateKey()) % keys.length]];
+  const count = group.entries.length;
+  const firstMeaning = group.entries[0].meaning || 'No description available.';
+
+  wotdContainer.innerHTML = `
+    <span class="wotd-label"><span class="wotd-medal">★</span>Word of the day</span>
+    <span class="wotd-word">
+      <span>${group.displayName}</span>
+      ${count > 1 ? `<span class="badge">${count} meanings</span>` : ''}
+    </span>
+    <span class="wotd-preview">${firstMeaning}</span>
+  `;
+
+  wotdContainer.onclick = () => {
+    searchInput.value = group.displayName;
+    dropdown.style.display = 'none';
+    displayWordCards(group);
+  };
+
+  wotdContainer.hidden = false;
+}
+
+// Pick the next word right after local midnight, even if the page stays open
+function scheduleMidnightRefresh() {
+  const now = new Date();
+  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+  setTimeout(() => {
+    showWordOfTheDay();
+    scheduleMidnightRefresh();
+  }, nextMidnight - now);
 }
 
 // Hide dropdown when clicking outside search area
